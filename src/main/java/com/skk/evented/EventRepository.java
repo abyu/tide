@@ -34,7 +34,7 @@ public final class EventRepository {
         for (EventHandler handler : handlers) {
             Method method = getMethod(handler, event);
             if (method != null) {
-                if(method.getParameterCount() == 0){
+                if(method.getParameterTypes().length == 0){
                     method.invoke(handler);
                 }else {
                     method.invoke(handler, event.getEventData());
