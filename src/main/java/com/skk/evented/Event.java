@@ -4,8 +4,6 @@ public abstract class Event {
 
     private EventData eventData;
 
-    public abstract String getId();
-
     protected Event(){
         eventData = new EmptyData();
     }
