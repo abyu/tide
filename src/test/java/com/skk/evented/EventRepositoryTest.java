@@ -34,24 +34,22 @@ public class EventRepositoryTest {
     @Test
     public void aHandlerForAnEventIsRegistered() throws InvocationTargetException, IllegalAccessException {
 
-        eventRepository.register(eventHandler1, new EventOne());
+        eventRepository.register(eventHandler1, EventOne.class);
 
-        eventRepository.raiseEvent(new EventOne());
-
-        ArrayList<EventHandler> handlers = eventRepository.getHandlers(new EventOne());
+        ArrayList<EventHandler> handlers = eventRepository.getHandlers(EventOne.class);
 
         Assert.assertThat(handlers.size(), Is.is(1));
     }
 
-//    @Test
-//    public void multipleHandlersForAnEventAreRegistered(){
-//        eventRepository.register(eventHandler1, Event.SMSReceived);
-//        eventRepository.register(eventHandler2, Event.SMSReceived);
-//
-//        ArrayList<EventHandler> handlers = eventRepository.getHandlers(Event.SMSReceived);
-//
-//        Assert.assertThat(handlers.size(), Is.is(2));
-//    }
+    @Test
+    public void multipleHandlersForAnEventAreRegistered(){
+        eventRepository.register(eventHandler1, EventOne.class);
+        eventRepository.register(eventHandler2, EventOne.class);
+
+        ArrayList<EventHandler> handlers = eventRepository.getHandlers(EventOne.class);
+
+        Assert.assertThat(handlers.size(), Is.is(2));
+    }
 //
 //    @Test
 //    public void onlyOneInstanceOfAHandlerIsRegisteredForAnEvent(){

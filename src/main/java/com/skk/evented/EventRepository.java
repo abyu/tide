@@ -8,31 +8,31 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class EventRepository {
 
-    private final ConcurrentHashMap<String, ArrayList<WeakReference<EventHandler>>> events;
+    private final ConcurrentHashMap<Class, ArrayList<WeakReference<EventHandler>>> events;
     private static EventRepository instance = new EventRepository();
 
     public EventRepository() {
-        events = new ConcurrentHashMap<String, ArrayList<WeakReference<EventHandler>>>();
+        events = new ConcurrentHashMap<Class, ArrayList<WeakReference<EventHandler>>>();
     }
 
     public static EventRepository getInstance() {
         return instance;
     }
 
-    public void register(EventHandler handler, Event eventName) {
+    public void register(EventHandler handler, Class eventType) {
 
-        ArrayList<WeakReference<EventHandler>> eventHandlers = emptyIfNull(events.get(eventName));
+        ArrayList<WeakReference<EventHandler>> eventHandlers = emptyIfNull(events.get(eventType));
 
         if (!getInstances(eventHandlers).contains(handler))
             eventHandlers.add(new WeakReference<EventHandler>(handler));
 
-        events.put(eventName.getId(), eventHandlers);
+        events.put(eventType, eventHandlers);
     }
 
     public void raiseEvent(Event event) throws InvocationTargetException, IllegalAccessException {
-        ArrayList<EventHandler> handlers = getHandlers(event);
+        ArrayList<EventHandler> handlers = getHandlers(event.getClass());
         for (EventHandler handler : handlers) {
-            Method method = getMethod(handler, event);
+            Method method = getMethod(handler, event.getClass());
             if (method != null) {
                 if(method.getParameterTypes().length == 0){
                     method.invoke(handler);
@@ -43,8 +43,8 @@ public final class EventRepository {
         }
     }
 
-    public ArrayList<EventHandler> getHandlers(Event event) {
-        ArrayList<WeakReference<EventHandler>> weakHandlers = events.get(event.getId());
+    public ArrayList<EventHandler> getHandlers(Class eventType) {
+        ArrayList<WeakReference<EventHandler>> weakHandlers = events.get(eventType);
 
         return getInstances(weakHandlers);
     }
@@ -66,7 +66,7 @@ public final class EventRepository {
         return instances;
     }
 
-    private Method getMethod(EventHandler handler, Event event) {
+    private Method getMethod(EventHandler handler, Class event) {
         Method[] declaredMethods = handler.getClass().getDeclaredMethods();
         for (Method method : declaredMethods) {
             if (isHandleMethodFor(method, event)) {
@@ -77,11 +77,11 @@ public final class EventRepository {
         return null;
     }
 
-    private boolean isHandleMethodFor(Method method, Event event) {
+    private boolean isHandleMethodFor(Method method, Class event) {
 
         HandleEvent annotation = method.getAnnotation(HandleEvent.class);
 
-        return annotation != null && annotation.eventType().equals(event.getClass());
+        return annotation != null && annotation.eventType().equals(event);
     }
 
 }
