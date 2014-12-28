@@ -12,22 +12,21 @@ public class EventHandlerWrapper {
         weakHandler = new WeakReference<EventHandler>(handler);
     }
 
-    public boolean hasHandler(EventHandler handler){
+    public boolean containsHandler(EventHandler handler) {
         EventHandler eventHandler = weakHandler.get();
         return eventHandler != null && eventHandler == handler;
     }
 
     public void invokeHandlerMethod(Event event) throws InvocationTargetException, IllegalAccessException, HandlerMethodNotFoundException {
-        Method handlerMethod = getHandlerMethodFor(event.getClass());
 
-        if(handlerMethod.getParameterTypes().length == 0)
-            handlerMethod.invoke(weakHandler.get());
-        else
-            handlerMethod.invoke(weakHandler.get(), event.getEventData());
+        HandlerMethod handlerMethod = getHandlerMethod(event);
+        handlerMethod.invoke();
+
     }
 
-    private Method getHandlerMethodFor(Class<? extends Event> eventClass) throws HandlerMethodNotFoundException{
-        EventHandler handler = weakHandler.get();
+    private Method getHandlerMethodFor(EventHandler handler, Class<? extends Event> eventClass) throws HandlerMethodNotFoundException {
+
+        if (handler == null) return null;
 
         Method[] declaredMethods = handler.getClass().getDeclaredMethods();
         for (Method method : declaredMethods) {
@@ -39,11 +38,22 @@ public class EventHandlerWrapper {
         throw new HandlerMethodNotFoundException(handler.getClass(), eventClass);
     }
 
-
     private boolean isHandleMethodFor(Method method, Class event) {
 
         HandleEvent annotation = method.getAnnotation(HandleEvent.class);
 
         return annotation != null && annotation.eventType().equals(event);
     }
+
+
+    private HandlerMethod getHandlerMethod(Event event) throws HandlerMethodNotFoundException {
+
+        EventHandler handler = weakHandler.get();
+
+        Method handlerMethod = getHandlerMethodFor(handler, event.getClass());
+
+        return HandlerMethod.get(handler, handlerMethod, event);
+
+    }
 }
+

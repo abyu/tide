@@ -7,7 +7,7 @@ public class EventHandlerWrappers extends ArrayList<EventHandlerWrapper> {
 
     public boolean contains(EventHandler handler){
         for (int index = 0; index < size(); index++) {
-            if(get(index).hasHandler(handler))
+            if(get(index).containsHandler(handler))
                 return true;
         }
 

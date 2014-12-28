@@ -3,7 +3,6 @@ package org.skk.evented;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.skk.evented.events.EventOne;
 import org.skk.evented.events.EventTwo;
 
@@ -18,7 +17,7 @@ public class EventHandlerWrapperTest  {
         TestHandler handler = new TestHandler();
         EventHandlerWrapper wrapper = new EventHandlerWrapper(handler);
 
-        Assert.assertThat(wrapper.hasHandler(handler), Is.is(true));
+        Assert.assertThat(wrapper.containsHandler(handler), Is.is(true));
     }
 
     @Test(expected = HandlerMethodNotFoundException.class)
@@ -28,6 +27,7 @@ public class EventHandlerWrapperTest  {
 
         wrapper.invokeHandlerMethod(new EventOne());
     }
+
     @Test
     public void methodAnnotatedWithHandleEventInsideHandlerIsInvoked() throws IllegalAccessException, HandlerMethodNotFoundException {
 
@@ -46,7 +46,7 @@ public class EventHandlerWrapperTest  {
     }
 
     @Test
-    public void handlerMethodIsInvokedWithEventDataWhenIsTakesAnArgument() throws HandlerMethodNotFoundException, IllegalAccessException {
+    public void handlerMethodIsInvokedWithEventDataWhenItTakesAnArgument() throws HandlerMethodNotFoundException, IllegalAccessException {
 
         EventHandlerWrapper wrapper = new EventHandlerWrapper(new HandlerOne());
         EventData eventData = mock(EventData.class);
@@ -61,6 +61,18 @@ public class EventHandlerWrapperTest  {
             Assert.assertTrue("Expected MethodInvoked exception, but was " + targetException.toString(), targetException instanceof MethodInvoked);
             Assert.assertThat(((MethodInvoked) targetException).getData(), Is.is(eventData));
 
+        }
+    }
+
+    @Test
+    public void wrapperWithNoHandlerInstanceResultsInNoOpWhileHandleInvoke()  {
+
+        EventHandlerWrapper badWrapper = new EventHandlerWrapper(null);
+
+        try {
+            badWrapper.invokeHandlerMethod(new EventOne());
+        } catch (Exception e) {
+            Assert.fail("Expected no exception to be thrown, but " + e + " happened");
         }
     }
 
