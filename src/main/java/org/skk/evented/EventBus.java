@@ -6,11 +6,10 @@ import org.skk.evented.intnl.EventHandlerWrappers;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class EventBus {
+public class EventBus {
 
+    private static final EventBus instance = new EventBus();
     private final ConcurrentHashMap<Class, EventHandlerWrappers> allHandlers;
-
-    private static EventBus instance = new EventBus();
 
     public EventBus() {
         allHandlers = new ConcurrentHashMap<Class, EventHandlerWrappers>();
@@ -37,6 +36,7 @@ public final class EventBus {
 
         weakReferencedEventHandlers.invokeHandlerMethod(event);
     }
+
     public EventHandlerWrappers getHandlers(Class eventType) {
 
         return emptyIfNull(allHandlers.get(eventType));

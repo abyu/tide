@@ -9,9 +9,9 @@ import java.util.ArrayList;
 
 public class EventHandlerWrappers extends ArrayList<EventHandlerWrapper> {
 
-    public boolean contains(EventHandler handler){
+    public boolean contains(EventHandler handler) {
         for (int index = 0; index < size(); index++) {
-            if(get(index).containsHandler(handler))
+            if (get(index).containsHandler(handler))
                 return true;
         }
 

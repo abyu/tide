@@ -1,6 +1,6 @@
 package org.skk.evented;
 
-public interface EventData{
+public interface EventData {
 
 }
 

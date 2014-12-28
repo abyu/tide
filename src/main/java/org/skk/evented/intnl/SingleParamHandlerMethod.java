@@ -6,11 +6,11 @@ import org.skk.evented.EventHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class SingleParamHandlerMethod extends HandlerMethod{
+public class SingleParamHandlerMethod extends HandlerMethod {
 
     private final EventHandler handler;
-    private Method handlerMethod;
     private final EventData eventData;
+    private Method handlerMethod;
 
     public SingleParamHandlerMethod(EventHandler handler, Method handlerMethod, EventData eventData) {
 

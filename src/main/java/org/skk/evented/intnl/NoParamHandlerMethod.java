@@ -5,7 +5,7 @@ import org.skk.evented.EventHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class NoParamHandlerMethod extends HandlerMethod{
+public class NoParamHandlerMethod extends HandlerMethod {
 
     private EventHandler handler;
     private Method handlerMethod;

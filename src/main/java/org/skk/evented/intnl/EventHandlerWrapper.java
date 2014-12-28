@@ -1,6 +1,9 @@
 package org.skk.evented.intnl;
 
-import org.skk.evented.*;
+import org.skk.evented.Event;
+import org.skk.evented.EventHandler;
+import org.skk.evented.HandleEvent;
+import org.skk.evented.HandlerMethodNotFoundException;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;

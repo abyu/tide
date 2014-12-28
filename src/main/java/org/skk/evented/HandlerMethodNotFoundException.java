@@ -12,6 +12,6 @@ public class HandlerMethodNotFoundException extends Exception {
 
     @Override
     public String getMessage() {
-        return "No handler method found for event "+eventClass+" on handler "+handlerClass+". Make sure the method is annotated with @HandleEvent passing the event class and it takes only one or no arguments";
+        return "No handler method found for event " + eventClass + " on handler " + handlerClass + ". Make sure the method is annotated with @HandleEvent passing the event class and it takes only one or no arguments";
     }
 }
