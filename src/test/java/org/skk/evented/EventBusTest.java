@@ -9,13 +9,12 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class EventRepositoryTest {
+public class EventBusTest {
 
     @Mock
     private EventHandler eventHandler1;
@@ -25,40 +24,40 @@ public class EventRepositoryTest {
 
     private TestHandler testHandler = new TestHandler();
 
-    private EventRepository eventRepository;
+    private EventBus eventBus;
 
     @Before
     public void setUp(){
         initMocks(this);
-        eventRepository = new EventRepository();
+        eventBus = new EventBus();
     }
 
     @Test
     public void aHandlerForAnEventIsRegistered() throws InvocationTargetException, IllegalAccessException {
 
-        eventRepository.register(eventHandler1, EventOne.class);
+        eventBus.register(eventHandler1, EventOne.class);
 
-        EventHandlerWrappers handlers = eventRepository.getHandlers(EventOne.class);
+        EventHandlerWrappers handlers = eventBus.getHandlers(EventOne.class);
 
         Assert.assertThat(handlers.size(), Is.is(1));
     }
 
     @Test
     public void multipleHandlersForAnEventAreRegistered(){
-        eventRepository.register(eventHandler1, EventOne.class);
-        eventRepository.register(eventHandler2, EventOne.class);
+        eventBus.register(eventHandler1, EventOne.class);
+        eventBus.register(eventHandler2, EventOne.class);
 
-        EventHandlerWrappers handlers = eventRepository.getHandlers(EventOne.class);
+        EventHandlerWrappers handlers = eventBus.getHandlers(EventOne.class);
 
         Assert.assertThat(handlers.size(), Is.is(2));
     }
 
     @Test
     public void onlyOneInstanceOfAHandlerIsRegisteredForAnEvent(){
-        eventRepository.register(eventHandler1, EventOne.class);
-        eventRepository.register(eventHandler1, EventOne.class);
+        eventBus.register(eventHandler1, EventOne.class);
+        eventBus.register(eventHandler1, EventOne.class);
 
-        EventHandlerWrappers handlers = eventRepository.getHandlers(EventOne.class);
+        EventHandlerWrappers handlers = eventBus.getHandlers(EventOne.class);
 
         Assert.assertThat(handlers.size(), Is.is(1));
     }
@@ -66,19 +65,19 @@ public class EventRepositoryTest {
     @Test
     public void emptyHandlerListIsReturnedWhenNoneRegistered(){
 
-        EventHandlerWrappers handlers = eventRepository.getHandlers(EventOne.class);
+        EventHandlerWrappers handlers = eventBus.getHandlers(EventOne.class);
 
         Assert.assertTrue(handlers.isEmpty());
     }
 
     @Test
     public void methodsAnnotatedWithHandleEventInHandlersAreInvokedOnRaiseAnEvent() throws IllegalAccessException, HandlerMethodNotFoundException, InvocationTargetException {
-        eventRepository.register(testHandler, EventTwo.class);
+        eventBus.register(testHandler, EventTwo.class);
 
         EventData data = mock(EventData.class);
 
             Event event = new EventTwo().withData(data);
-            eventRepository.raiseEvent(event);
+            eventBus.raiseEvent(event);
 
         spy(testHandler).handleEvent(data);
     }

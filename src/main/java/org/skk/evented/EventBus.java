@@ -3,17 +3,17 @@ package org.skk.evented;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class EventRepository {
+public final class EventBus {
 
     private final ConcurrentHashMap<Class, EventHandlerWrappers> allHandlers;
 
-    private static EventRepository instance = new EventRepository();
+    private static EventBus instance = new EventBus();
 
-    public EventRepository() {
+    public EventBus() {
         allHandlers = new ConcurrentHashMap<Class, EventHandlerWrappers>();
     }
 
-    public static EventRepository getInstance() {
+    public static EventBus getInstance() {
         return instance;
     }
 
