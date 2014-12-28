@@ -1,4 +1,7 @@
-package org.skk.evented;
+package org.skk.evented.intnl;
+
+import org.skk.evented.EventData;
+import org.skk.evented.EventHandler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

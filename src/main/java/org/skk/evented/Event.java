@@ -1,5 +1,7 @@
 package org.skk.evented;
 
+import org.skk.evented.core.EmptyData;
+
 public abstract class Event {
 
     private EventData eventData;

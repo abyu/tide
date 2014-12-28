@@ -1,10 +1,15 @@
-package org.skk.evented;
+package org.skk.evented.intnl;
 
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.skk.evented.Event;
+import org.skk.evented.EventData;
+import org.skk.evented.EventHandler;
+import org.skk.evented.HandlerMethodNotFoundException;
+
 import java.lang.reflect.Method;
 
 import static org.mockito.MockitoAnnotations.initMocks;

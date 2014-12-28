@@ -1,4 +1,6 @@
-package org.skk.evented;
+package org.skk.evented.intnl;
+
+import org.skk.evented.*;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;

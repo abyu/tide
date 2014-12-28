@@ -1,8 +1,15 @@
-package org.skk.evented;
+package org.skk.evented.intnl;
 
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.Test;
+import org.skk.evented.EventData;
+import org.skk.evented.HandlerMethodNotFoundException;
+import org.skk.evented.dimpl.BadHandler;
+import org.skk.evented.dimpl.HandlerOne;
+import org.skk.evented.dimpl.MethodInvoked;
+import org.skk.evented.dimpl.TestHandler;
+import org.skk.evented.intnl.EventHandlerWrapper;
 import org.skk.evented.events.EventOne;
 import org.skk.evented.events.EventTwo;
 
@@ -76,26 +83,6 @@ public class EventHandlerWrapperTest  {
         }
     }
 
-}
-
-class BadHandler implements EventHandler{
-
-    public void notAHandlerMethod(){
-
-    }
-}
-
-class HandlerOne implements  EventHandler{
-
-    @HandleEvent(eventType = EventOne.class)
-    public void handleEventOne() throws MethodInvoked {
-        throw new MethodInvoked();
-    }
-
-    @HandleEvent(eventType = EventTwo.class)
-    public void handleEventTwo(EventData eventData) throws MethodInvoked{
-        throw new MethodInvoked(eventData);
-    }
 }
 
 

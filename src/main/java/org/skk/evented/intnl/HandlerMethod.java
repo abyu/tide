@@ -1,4 +1,8 @@
-package org.skk.evented;
+package org.skk.evented.intnl;
+
+import org.skk.evented.Event;
+import org.skk.evented.EventHandler;
+import org.skk.evented.HandlerMethodNotFoundException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
