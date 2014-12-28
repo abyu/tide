@@ -1,4 +1,4 @@
-package com.skk.evented;
+package org.skk.evented;
 
 public interface EventHandler{
 

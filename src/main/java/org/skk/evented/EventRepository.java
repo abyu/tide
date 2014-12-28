@@ -1,4 +1,4 @@
-package com.skk.evented;
+package org.skk.evented;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
@@ -31,8 +31,10 @@ public final class EventRepository {
 
     public void raiseEvent(Event event) throws InvocationTargetException, IllegalAccessException {
         ArrayList<EventHandler> handlers = getHandlers(event.getClass());
+
         for (EventHandler handler : handlers) {
             Method method = getMethod(handler, event.getClass());
+
             if (method != null) {
                 if(method.getParameterTypes().length == 0){
                     method.invoke(handler);

@@ -1,7 +1,7 @@
-package com.skk.evented;
+package org.skk.evented;
 
-import com.skk.evented.events.EventOne;
-import com.skk.evented.events.EventTwo;
+import org.skk.evented.events.EventOne;
+import org.skk.evented.events.EventTwo;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.Before;
@@ -78,6 +78,7 @@ public class EventRepositoryTest {
         try {
             Event event = new EventTwo().withData(data);
             eventRepository.raiseEvent(event);
+
             Assert.fail("Expected InvocationTargetException to be thrown");
         } catch (InvocationTargetException e) {
             Throwable targetException = e.getTargetException();
@@ -94,6 +95,7 @@ public class EventRepositoryTest {
         EventData data = mock(EventData.class);
         try {
             eventRepository.raiseEvent(new EventOne().withData(data));
+
             Assert.fail("Expected InvocationTargetException to be thrown");
         } catch (InvocationTargetException e) {
             Throwable targetException = e.getTargetException();

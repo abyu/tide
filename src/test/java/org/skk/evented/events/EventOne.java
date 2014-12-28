@@ -1,6 +1,6 @@
-package com.skk.evented.events;
+package org.skk.evented.events;
 
-import com.skk.evented.Event;
+import org.skk.evented.Event;
 
 /**
  * Created by kishorek on 12/7/14.
