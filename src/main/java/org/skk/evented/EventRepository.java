@@ -1,18 +1,16 @@
 package org.skk.evented;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class EventRepository {
 
-    private final ConcurrentHashMap<Class, ArrayList<WeakReference<EventHandler>>> events;
+    private final ConcurrentHashMap<Class, EventHandlerWrappers> allHandlers;
+
     private static EventRepository instance = new EventRepository();
 
     public EventRepository() {
-        events = new ConcurrentHashMap<Class, ArrayList<WeakReference<EventHandler>>>();
+        allHandlers = new ConcurrentHashMap<Class, EventHandlerWrappers>();
     }
 
     public static EventRepository getInstance() {
@@ -21,71 +19,27 @@ public final class EventRepository {
 
     public void register(EventHandler handler, Class eventType) {
 
-        ArrayList<WeakReference<EventHandler>> eventHandlers = emptyIfNull(events.get(eventType));
+        EventHandlerWrappers handlers = emptyIfNull(allHandlers.get(eventType));
 
-        if (!getInstances(eventHandlers).contains(handler))
-            eventHandlers.add(new WeakReference<EventHandler>(handler));
-
-        events.put(eventType, eventHandlers);
-    }
-
-    public void raiseEvent(Event event) throws InvocationTargetException, IllegalAccessException {
-        ArrayList<EventHandler> handlers = getHandlers(event.getClass());
-
-        for (EventHandler handler : handlers) {
-            Method method = getMethod(handler, event.getClass());
-
-            if (method != null) {
-                if(method.getParameterTypes().length == 0){
-                    method.invoke(handler);
-                }else {
-                    method.invoke(handler, event.getEventData());
-                }
-            }
-        }
-    }
-
-    public ArrayList<EventHandler> getHandlers(Class eventType) {
-        ArrayList<WeakReference<EventHandler>> weakHandlers = events.get(eventType);
-
-        return getInstances(weakHandlers);
-    }
-
-    private <T> ArrayList<T> emptyIfNull(ArrayList<T> list) {
-        return list != null ? list : new ArrayList<T>();
-    }
-
-    private <T> ArrayList<T> getInstances(ArrayList<WeakReference<T>> weakReferences) {
-        ArrayList<T> instances = new ArrayList<T>();
-
-        for (WeakReference<T> weakReference : emptyIfNull(weakReferences)) {
-            T instance = weakReference.get();
-            if (instance != null) {
-                instances.add(instance);
-            }
+        if (!handlers.contains(handler)) {
+            handlers.add(new EventHandlerWrapper(handler));
         }
 
-        return instances;
+        allHandlers.put(eventType, handlers);
     }
 
-    private Method getMethod(EventHandler handler, Class event) {
-        Method[] declaredMethods = handler.getClass().getDeclaredMethods();
-        for (Method method : declaredMethods) {
-            if (isHandleMethodFor(method, event)) {
-                return method;
-            }
-        }
+    public void raiseEvent(Event event) throws InvocationTargetException, IllegalAccessException, HandlerMethodNotFoundException {
 
-        return null;
+        EventHandlerWrappers weakReferencedEventHandlers = allHandlers.get(event.getClass());
+
+        weakReferencedEventHandlers.invokeHandlerMethod(event);
+    }
+    public EventHandlerWrappers getHandlers(Class eventType) {
+
+        return emptyIfNull(allHandlers.get(eventType));
     }
 
-    private boolean isHandleMethodFor(Method method, Class event) {
-
-        HandleEvent annotation = method.getAnnotation(HandleEvent.class);
-
-        return annotation != null && annotation.eventType().equals(event);
+    private EventHandlerWrappers emptyIfNull(EventHandlerWrappers list) {
+        return list != null ? list : new EventHandlerWrappers();
     }
-
 }
-
-
