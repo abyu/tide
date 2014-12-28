@@ -1,5 +1,7 @@
 package org.skk.evented;
 
+import org.skk.evented.dimpl.TestHandler;
+import org.skk.evented.intnl.EventHandlerWrappers;
 import org.skk.evented.events.EventOne;
 import org.skk.evented.events.EventTwo;
 import org.hamcrest.core.Is;
@@ -76,64 +78,10 @@ public class EventBusTest {
 
         EventData data = mock(EventData.class);
 
-            Event event = new EventTwo().withData(data);
-            eventBus.raiseEvent(event);
+        Event event = new EventTwo().withData(data);
+        eventBus.raiseEvent(event);
 
         spy(testHandler).handleEvent(data);
-    }
-
-//    @Test
-//    public void handlersCanRegisterToMultipleEventsCorrespondingMethodIsOnlyCalled() throws IllegalAccessException, HandlerMethodNotFoundException {
-//        eventRepository.register(testHandler, EventOne.class);
-//        eventRepository.register(testHandler, EventTwo.class);
-//
-//        EventData data = mock(EventData.class);
-//        try {
-//            eventRepository.raiseEvent(new EventOne().withData(data));
-//
-//            Assert.fail("Expected InvocationTargetException to be thrown");
-//        } catch (InvocationTargetException e) {
-//            Throwable targetException = e.getTargetException();
-//            Assert.assertTrue("Expected MethodInvoked exception, but was "+targetException.toString(), targetException instanceof MethodInvoked);
-//            Assert.assertThat(((MethodInvoked) targetException).getData(), Is.<EventData>is(data));
-//        }
-//    }
-
-
-
-
-}
-class TestHandler implements EventHandler{
-
-    @HandleEvent(eventType = EventTwo.class)
-    public void handleEvent(EventData data)  {
-        //Mockito does not support spying on annotated methods(the annotations are lost on the spy object), hence an exception is used assert that the method was called.
-//        throw new MethodInvoked(data);
-    }
-
-
-    @HandleEvent(eventType = EventOne.class)
-    public void handleEventOne(EventData data) throws MethodInvoked {
-        throw new MethodInvoked(data);
-    }
-
-}
-
- class MethodInvoked extends Exception {
-
-    private EventData data;
-
-    public MethodInvoked(EventData data) {
-
-        this.data = data;
-    }
-
-    public MethodInvoked() {
-
-    }
-
-    public EventData getData() {
-        return data;
     }
 }
 

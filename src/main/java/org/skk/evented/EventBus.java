@@ -1,5 +1,8 @@
 package org.skk.evented;
 
+import org.skk.evented.intnl.EventHandlerWrapper;
+import org.skk.evented.intnl.EventHandlerWrappers;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ConcurrentHashMap;
 

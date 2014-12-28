@@ -9,6 +9,7 @@ import org.skk.evented.Event;
 import org.skk.evented.EventData;
 import org.skk.evented.EventHandler;
 import org.skk.evented.HandlerMethodNotFoundException;
+import org.skk.evented.dimpl.Methods;
 
 import java.lang.reflect.Method;
 
@@ -66,17 +67,3 @@ public class HandlerMethodTest {
 
 }
 
-class Methods {
-
-    public void noParamMethod(){
-
-    }
-
-    public void singleParamMethod(EventData eventData){
-
-    }
-
-    public void doubleParamMethod(EventData eventData, int a){
-
-    }
-}
