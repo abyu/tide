@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Tide by abyu</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Tide</h1>
+        <p>Events for Java</p>
+
+        <p class="view"><a href="https://github.com/abyu/tide">View the Project on GitHub <small>abyu/tide</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/abyu/tide/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/abyu/tide/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/abyu/tide">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="tide" class="anchor" href="#tide" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tide</h1>
+
+<p><a href="https://travis-ci.org/abyu/tide"><img src="https://travis-ci.org/abyu/tide.svg" alt="Build Status"></a></p>
+
+<p>Event based publisher-subscriber framework for java.</p>
+
+<h1>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h1>
+
+<p>Create events by extending Event class.
+Create handlers for these events by annotating your method with HandleEvent passing in the event class name.
+The handler class should implement EventHandler interface and should register to any events via EventBus.</p>
+
+<p>If the handler method requires any data, create a data object of type EventData.</p>
+
+<p>Raise a event by instantiating a object of your Event, passing any any data if required, via EventBus.</p>
+
+<p>Instantiate a singleton EventBus for your application. Use EventBus.getInstance() in case it's manually injected.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/abyu">abyu</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
