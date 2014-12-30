@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Evented.iml" filepath="$PROJECT_DIR$/Evented.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Tide.iml" filepath="$PROJECT_DIR$/Tide.iml" />
     </modules>
   </component>
 </project>
