@@ -1,5 +1,12 @@
 package org.skk.tide;
 
+
+/**
+ * The runtime exception thrown when a registered handler does handle the specified event.
+ *
+ * When a handler registers for an event, the handle method needs to be annotated with {@link org.skk.tide.HandleEvent}.
+ * If it does not, {@link org.skk.tide.HandlerMethodNotFoundException} is thrown at runtime
+ */
 public class HandlerMethodNotFoundException extends Exception {
     private final Class<? extends EventHandler> handlerClass;
     private final Class<? extends Event> eventClass;
