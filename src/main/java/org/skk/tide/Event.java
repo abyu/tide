@@ -3,7 +3,7 @@ package org.skk.tide;
 import org.skk.tide.intnl.EmptyData;
 
 /**
- * Base type of all custom events, inherit from this class to create a new event.
+ * Base type for all custom events, inherit from this class to create a new event.
  *
  * EventBus understands only events that {@code extends Event}
  */

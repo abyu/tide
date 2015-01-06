@@ -30,7 +30,7 @@ public class EventBus {
     }
 
     /**
-     * static Factory method to get an instance of EventBus, always use this to raise or register to an event.
+     *  static Factory method to get an instance of EventBus, always use this to raise or register to an event.
      *
      *  @return a singleton EventBus instance
      */
@@ -41,13 +41,12 @@ public class EventBus {
 
     /**
      * Use to register to an event of type Event, with the handler class.
-     * A handler class can register to multiple events, handle each event by annotating with
-     * @see org.skk.tide.HandleEvent
+     * A handler class can register to multiple events, handle each event by annotating with {@link org.skk.tide.HandleEvent}
      *
-     * @param handler The handler instance that handles the event, it has be of type EventHandler
-     *                @see org.skk.tide.EventHandler
-     * @param eventType The class name of the Event, which handler wants to handled, the events need inherit from Event
-     *                  @see org.skk.tide.Event
+     * @param handler The handler instance that handles the event, it has be of type {@link org.skk.tide.EventHandler}
+     *
+     * @param eventType The class name of the Event, which handler wants to handled, the events need inherit from {@link org.skk.tide.Event}
+     *
      */
     public void register(EventHandler handler, Class<? extends Event> eventType) {
 
@@ -62,12 +61,12 @@ public class EventBus {
 
     /**
      * Use to raise an event, passing in the event object.
-     * The event object needs to contain any data, the handler requires.
+     * The event object needs to contain any data the handler requires.
      * @see org.skk.tide.Event
      *
      * @param event An instance of the required event along with any data.
-     * @throws InvocationTargetException
-     * @throws IllegalAccessException
+     * @throws InvocationTargetException when the handler method throws any exception
+     * @throws IllegalAccessException when the handler method is not public
      * @throws HandlerMethodNotFoundException when any registered handler does not handle the specified event it registered to.
      */
     public void raiseEvent(Event event) throws InvocationTargetException, IllegalAccessException, HandlerMethodNotFoundException {
