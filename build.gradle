@@ -33,6 +33,7 @@ signing {
     sign configurations.archives
 }
 
+if(project.hasProperty('ossrhUsername')){
 uploadArchives {
   repositories {
     mavenDeployer {
@@ -78,4 +79,6 @@ uploadArchives {
       }
     }
   }
-}  
+
+  } 
+} 
