@@ -29,11 +29,11 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
+if(project.hasProperty('ossrhUsername')){
 signing {
     sign configurations.archives
 }
 
-if(project.hasProperty('ossrhUsername')){
 uploadArchives {
   repositories {
     mavenDeployer {
