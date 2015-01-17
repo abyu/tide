@@ -5,47 +5,215 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Tide by abyu</title>
 
+
     <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="stylesheets/shCore.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <script type="text/javascript" src="javascripts/shCore.js"></script>
+    <script type="text/javascript" src="javascripts/shBrushGroovy.js"></script>
+    <script type="text/javascript" src="javascripts/shBrushXml.js"></script>
+    <script type="text/javascript" src="javascripts/shBrushJava.js"></script>
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
   </head>
   <body>
     <div class="wrapper">
-      <header>
-        <h1>Tide</h1>
-        <p>Events for Java</p>
+      <h1><a id="tide" class="anchor" href="#tide" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tide</h1>
 
-        <p class="view"><a href="https://github.com/abyu/tide">View the Project on GitHub <small>abyu/tide</small></a></p>
+      <p>Event based publisher-subscriber framework for java. Create and raise custom events in your Java code.</p>
 
-    </header>
-      <section>
-        <h1>
-<a id="tide" class="anchor" href="#tide" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tide</h1>
+      <h1>
+        <a id="usage" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Started</h1>
+      </h1>
+      <p>
+      <h2>Gradle</h2>
+      <p>Add tide as a jave dependency</p>
+      <pre class="brush: groovy">
+        apply plugin: 'java'
 
-<p>Event based publisher-subscriber framework for java.</p>
+        repositories { 
+          mavenCentral()
+        }
 
-<h1>
-<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h1>
+        dependencies {
+          compile group: 'com.github.abyu', name: 'tide', version: '1.0.0'
+        }
+      </pre>
+      <h2>Maven</h2>
+      Add tide as a dependency in your pom.xml
+      <pre class="brush: xml">
+      <project>
+        ...
+        <dependencies>
+          <dependency>
+            <groupId>com.github.abyu</groupId>
+            <artifactId>tide</artifactId>
+            <version>1.0.0</version>
+          </dependency>
+          ...
+        </dependencies>
+      </project>
+      </pre>
+      </p>
 
-<p>Create events by extending Event class.
-Create handlers for these events by annotating your method with HandleEvent passing in the event class name.
-The handler class should implement EventHandler interface and should register to any events via EventBus.</p>
+      <h1>
 
-<p>If the handler method requires any data, create a data object of type EventData.</p>
+      <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h1>
 
-<p>Raise a event by instantiating a object of your Event, passing any any data if required, via EventBus.</p>
+      <p>Start by creating a <b>singleton instance of EventBus</b>, if you are using a DependencyInjection framework make sure the instance of EventBus in <b>singleton scope</b>.  
+      To obtain an instance of EventBus manually, use <b>EventBus's <i>getInstance</i></b> method, that will make sure that you use the same instance across your code.
+      Do not create a new instance of EventBus yourself, the event model will not work as intended.</p>
 
-<p>Instantiate a singleton EventBus for your application. Use EventBus.getInstance() in case it's manually injected.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/abyu">abyu</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
+      <p>Create events by extending Event class.</p>
+      <pre class="brush: java">
+        /* DownloadComplete.java */
+        package com.example;
+
+        import org.skk.tide.Event;
+
+        public class DownloadComplete extends Event {
+
+          public DownloadComplete() {
+              super();
+          }
+        }
+      </pre>
+
+       <p>All your event handlers should implement the interface EventHandler</p>
+       <pre class="brush: java">
+          /* DownloadMachine.java */
+          package com.example;
+          
+          import org.skk.tide.EventHandler;
+
+          public class DownloadMachine implements EventHandler {
+
+            /* rest of class code goes here */
+          }
+       </pre>
+
+       <p>Your handle will handle particular events, create a method to handle each type of the event. </p>
+       <p>Use the annotation HandleEvent, to specify what event your method handles. </p>
+       <pre class="brush: java">
+          /* DownloadMachine.java */
+          package com.example;
+
+          import org.skk.tide.EventHandler;
+
+          public class DownloadMachine implements EventHandler {
+
+            /* rest of class code goes here */
+
+            @HandleEvent(eventType = DownloadComplete.class)
+            public void downloadCompleted(){
+
+              /* Handle code goes here */
+            }
+          }
+       </pre>
+
+       <p>Now that we have an event to raise and a handler to handle it, we will have to tell tide to call this handler when the event is raised</p> 
+       <p>We do that by registering the handler to EventBus, specifying the event name</p>
+       <pre class="brush: java">
+          /* Application.java */
+          package com.example;
+
+          import org.skk.tide.EventBus;
+
+          public class Application {
+
+            private EventBus eventBus;
+
+            public void init(){
+
+              eventBus.register(new DownloadMachine(), DownloadComplete.class);
+            }
+          }
+       </pre>
+
+       <p>Raise the event using the EventBus's raiseEvent method, passing in a new instance of the event.</p>
+       <pre class="brush: java">
+        /* ActionMachine.java */
+        package com.example;
+
+        import org.skk.tide.EventBus;
+
+        public class ActionMachine {
+
+          public ActionMachine(EventBus eventBus){
+          
+            this.eventBus = eventBus;
+          }
+
+          public void orchestrate(){
+
+            eventBus.raiseEvent(new DownloadComplete());
+          }
+        }
+       </pre>
+
+       <p>If you need to pass any data to your handler, create an object of type Eventdata. <p>
+       <pre class="brush: java">
+        /* DownloadData.java */
+        package com.example;
+
+        import org.skk.tide.EventData;
+
+        public class DownloadData implements EventData{
+
+          /* rest of the class */
+        }
+       </pre>
+
+       <p>Pass the instance of data while raising the event.</p>
+       <pre class="brush: java">
+        /* ActionMachine.java */
+        public class ActionMachine {
+
+          public void orchestrate(){
+
+            eventBus.raiseEvent(new DownloadComplete().withData(new DownloadData()));
+          }
+        }
+       </pre>
+
+       <p>In order for the handler method to receive this data, the handler method must take a parameter of this type.</p>
+       <pre class="brush: java">
+          /* DownloadMachine.java */
+          package com.example;
+
+          import org.skk.tide.EventHandler;
+
+          public class DownloadMachine implements EventHandler {
+
+            /* rest of class code goes here */
+
+            @HandleEvent(eventType = DownloadComplete.class)
+            public void downloadCompleted(EventData data){
+              /* Cast to the required type */
+              DownloadData downloadData = (DownloadData) data;
+              /* Handle code goes here */
+            }
+          }
+        </pre>
+
+        <p>The handle method should be either zero parameter or one parameter of type EventData.</p>
+        <p>If an event was raised with some data and the registed handler method does not take in data as the parameter, the handler method will be invoked without
+         any data.</p>
+        <p>EventBus uses reflection to find out the corresponding handler method for an event, hence the method should be annotated properly as mentioned above. If not 
+        MethodNotFound exception is thrown at run time</p>
+
     </div>
+
+    <footer>
+      Project maintained by Kishore Kumar (<a target="_blank" href="http://github.com/abyu/tide">abyu</a>).
+    </footer>
+
     <script src="javascripts/scale.fix.js"></script>
-    
+    <script type="text/javascript">
+         SyntaxHighlighter.all()
+    </script>  
   </body>
 </html>
